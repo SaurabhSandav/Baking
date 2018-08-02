@@ -1,10 +1,12 @@
 package com.redridgeapps.baking;
 
-import android.app.Application;
-
+import com.redridgeapps.baking.di.DaggerAppComponent;
 import com.squareup.leakcanary.LeakCanary;
 
-public class App extends Application {
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
+
+public class App extends DaggerApplication {
 
     @Override
     public void onCreate() {
@@ -15,5 +17,10 @@ public class App extends Application {
             return;
         }
         LeakCanary.install(this);
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(App.this).build();
     }
 }
