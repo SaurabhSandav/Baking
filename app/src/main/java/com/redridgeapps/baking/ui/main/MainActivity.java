@@ -1,7 +1,9 @@
-package com.redridgeapps.baking;
+package com.redridgeapps.baking.ui.main;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.redridgeapps.baking.R;
 
 public class MainActivity extends AppCompatActivity {
 
