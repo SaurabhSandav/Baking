@@ -3,10 +3,9 @@ package com.redridgeapps.baking.ui.main;
 import android.os.Bundle;
 
 import com.redridgeapps.baking.R;
+import com.redridgeapps.baking.ui.base.BaseActivity;
 
-import dagger.android.support.DaggerAppCompatActivity;
-
-public class MainActivity extends DaggerAppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
