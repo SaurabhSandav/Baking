@@ -9,11 +9,14 @@ import com.redridgeapps.baking.model.Recipe;
 import com.redridgeapps.baking.repo.RecipeRepository;
 import com.redridgeapps.baking.ui.base.BaseActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
+
+    public static final String KEY_RECIPE_LIST = "recipe_list";
 
     @Inject
     RecipeRepository recipeRepo;
@@ -24,13 +27,24 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        observeRecipeOperations();
-        recipeRepo.fetchRecipes();
+        if (savedInstanceState != null) {
+            recipeList = savedInstanceState.getParcelableArrayList(KEY_RECIPE_LIST);
+        } else {
+            observeRecipeOperations();
+            recipeRepo.fetchRecipes();
+        }
     }
 
     @Override
     protected int provideLayout() {
         return R.layout.activity_main;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (recipeList != null)
+            outState.putParcelableArrayList(KEY_RECIPE_LIST, new ArrayList<>(recipeList));
     }
 
     private void observeRecipeOperations() {
