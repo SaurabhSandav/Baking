@@ -39,6 +39,9 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
 
+    // LiveData
+    implementation "android.arch.lifecycle:livedata:$lifecycle_version"
+
     // Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
