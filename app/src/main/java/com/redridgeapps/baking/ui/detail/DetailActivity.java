@@ -8,10 +8,12 @@ import com.redridgeapps.baking.R;
 import com.redridgeapps.baking.databinding.ActivityDetailBinding;
 import com.redridgeapps.baking.model.Recipe;
 import com.redridgeapps.baking.ui.base.BaseActivity;
+import com.redridgeapps.baking.ui.detail.recipe_step.RecipeStepFragment;
 
 public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
 
     private static final String EXTRA_RECIPE = "extra_recipe";
+    private static final String TAG_STEPS_FRAGMENT = "steps_fragment";
 
     private Recipe recipe;
 
@@ -30,10 +32,19 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
         boolean isLayoutMultiPane = getBinding().fragmentDetail != null;
 
         setTitle(recipe.getName());
+
+        if (getSupportFragmentManager().findFragmentByTag(TAG_STEPS_FRAGMENT) == null)
+            showStepsFragment();
     }
 
     @Override
     protected int provideLayout() {
         return R.layout.activity_detail;
+    }
+
+    private void showStepsFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(getBinding().fragmentContainer.getId(), RecipeStepFragment.newInstance(recipe), TAG_STEPS_FRAGMENT)
+                .commit();
     }
 }
