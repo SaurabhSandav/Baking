@@ -37,4 +37,5 @@ ext {
     moshi_version = '1.6.0'
     retrofit_version = '2.4.0'
     leak_canary_version = '1.6.1'
+    timeline_view_version = '1.0.6'
 }
