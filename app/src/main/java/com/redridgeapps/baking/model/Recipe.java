@@ -2,6 +2,7 @@ package com.redridgeapps.baking.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.util.DiffUtil;
 
 import com.squareup.moshi.Json;
 
@@ -113,4 +114,17 @@ public class Recipe implements Parcelable {
         dest.writeInt(this.servings);
         dest.writeString(this.image);
     }
+
+    public static final DiffUtil.ItemCallback<Recipe> DIFF_CALLBACK = new DiffUtil.ItemCallback<Recipe>() {
+
+        @Override
+        public boolean areItemsTheSame(Recipe oldItem, Recipe newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(Recipe oldItem, Recipe newItem) {
+            return true;
+        }
+    };
 }
