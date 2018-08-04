@@ -2,6 +2,7 @@ package com.redridgeapps.baking.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v7.util.DiffUtil;
 
 import com.squareup.moshi.Json;
 
@@ -98,4 +99,17 @@ public class Step implements Parcelable {
         dest.writeString(this.videoURL);
         dest.writeString(this.thumbnailURL);
     }
+
+    public static final DiffUtil.ItemCallback<Step> DIFF_CALLBACK = new DiffUtil.ItemCallback<Step>() {
+
+        @Override
+        public boolean areItemsTheSame(Step oldItem, Step newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(Step oldItem, Step newItem) {
+            return true;
+        }
+    };
 }
