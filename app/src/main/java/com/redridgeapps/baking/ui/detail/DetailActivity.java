@@ -27,6 +27,8 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
 
         recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
 
+        boolean isLayoutMultiPane = getBinding().fragmentDetail != null;
+
         setTitle(recipe.getName());
     }
 
