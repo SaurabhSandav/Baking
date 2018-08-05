@@ -2,20 +2,26 @@ package com.redridgeapps.baking.ui.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.redridgeapps.baking.R;
 import com.redridgeapps.baking.databinding.ActivityDetailBinding;
 import com.redridgeapps.baking.model.Recipe;
+import com.redridgeapps.baking.model.Step;
 import com.redridgeapps.baking.ui.base.BaseActivity;
 import com.redridgeapps.baking.ui.detail.recipe_step.RecipeStepFragment;
+import com.redridgeapps.baking.ui.detail.step_detail.StepDetailFragment;
 
-public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
+public class DetailActivity extends BaseActivity<ActivityDetailBinding>
+        implements RecipeStepFragment.FragmentInteractionListener {
 
     private static final String EXTRA_RECIPE = "extra_recipe";
     private static final String TAG_STEPS_FRAGMENT = "steps_fragment";
 
     private Recipe recipe;
+    private boolean isLayoutMultiPane;
+    private int selectedStepIndex = -1;
 
     public static Intent createIntent(AppCompatActivity activity, Recipe recipe) {
         Intent intent = new Intent(activity, DetailActivity.class);
@@ -29,7 +35,7 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
 
         recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
 
-        boolean isLayoutMultiPane = getBinding().fragmentDetail != null;
+        isLayoutMultiPane = getBinding().fragmentDetail != null;
 
         setTitle(recipe.getName());
 
@@ -42,9 +48,31 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding> {
         return R.layout.activity_detail;
     }
 
+    @Override
+    public void onStepSelected(Step step) {
+        selectedStepIndex = recipe.getSteps().indexOf(step);
+
+        Fragment newFragment = StepDetailFragment.newInstance(step);
+
+        replaceFragmentMultiPane(newFragment);
+    }
+
     private void showStepsFragment() {
         getSupportFragmentManager().beginTransaction()
                 .replace(getBinding().fragmentContainer.getId(), RecipeStepFragment.newInstance(recipe), TAG_STEPS_FRAGMENT)
+                .commit();
+    }
+
+    private void replaceFragmentMultiPane(Fragment fragment) {
+
+        int containerId = getBinding().fragmentContainer.getId();
+        if (isLayoutMultiPane) containerId = getBinding().fragmentDetail.getId();
+
+        getSupportFragmentManager().popBackStack();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 }

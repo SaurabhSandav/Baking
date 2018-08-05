@@ -1,6 +1,6 @@
 package com.redridgeapps.baking.ui.detail.recipe_step;
 
-
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +13,14 @@ import com.redridgeapps.baking.databinding.FragmentRecipeStepBinding;
 import com.redridgeapps.baking.model.Recipe;
 import com.redridgeapps.baking.model.Step;
 import com.redridgeapps.baking.ui.base.BaseFragment;
-import com.redridgeapps.baking.util.function.Consumer;
 
 public class RecipeStepFragment extends BaseFragment<FragmentRecipeStepBinding> {
 
     private static final String ARG_RECIPE = "recipe";
 
     private Recipe recipe;
+
+    private FragmentInteractionListener activityListener;
 
     public static RecipeStepFragment newInstance(Recipe recipe) {
 
@@ -54,17 +55,36 @@ public class RecipeStepFragment extends BaseFragment<FragmentRecipeStepBinding> 
         return R.layout.fragment_recipe_step;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FragmentInteractionListener) {
+            activityListener = (FragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activityListener = null;
+    }
+
     private void setupRecyclerView() {
 
-        Consumer<Step> clickListener = step -> {
-        };
-
-        RecipeStepAdapter stepAdapter = new RecipeStepAdapter(clickListener);
+        RecipeStepAdapter stepAdapter = new RecipeStepAdapter(activityListener::onStepSelected);
 
         getBinding().recyclerView.setAdapter(stepAdapter);
         getBinding().recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         getBinding().recyclerView.setHasFixedSize(true);
 
         stepAdapter.submitList(recipe.getSteps());
+    }
+
+    public interface FragmentInteractionListener {
+
+        void onStepSelected(Step step);
     }
 }

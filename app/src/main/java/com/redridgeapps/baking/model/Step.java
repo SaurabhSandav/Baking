@@ -112,4 +112,15 @@ public class Step implements Parcelable {
             return true;
         }
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (!(obj instanceof Step)) return false;
+
+        Step otherStep = (Step) obj;
+
+        return this.getId() == otherStep.getId();
+    }
 }
