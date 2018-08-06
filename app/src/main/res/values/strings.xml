@@ -2,6 +2,8 @@
     <string name="app_name">Baking</string>
 
     <string name="text_retry">Retry</string>
+    <string name="text_previous">Previous</string>
+    <string name="text_next">Next</string>
 
     <string name="error_fetch_failed">Fetching recipes failed!</string>
 </resources>

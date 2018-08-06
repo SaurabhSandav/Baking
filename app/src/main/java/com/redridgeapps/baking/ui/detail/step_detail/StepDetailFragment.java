@@ -1,6 +1,7 @@
 package com.redridgeapps.baking.ui.detail.step_detail;
 
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,18 +26,23 @@ import com.redridgeapps.baking.ui.base.BaseFragment;
 public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> {
 
     private static final String ARG_STEP = "step";
+    private static final String ARG_LOCATION = "location";
 
     private Step step;
+    private Location location;
 
     private SimpleExoPlayer player;
     private boolean playWhenReady;
     private int currentWindow = 0;
     private long playbackPosition = 0;
 
-    public static StepDetailFragment newInstance(Step step) {
+    private FragmentInteractionListener activityListener;
+
+    public static StepDetailFragment newInstance(Step step, Location location) {
 
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP, step);
+        args.putSerializable(ARG_LOCATION, location);
 
         StepDetailFragment fragment = new StepDetailFragment();
         fragment.setArguments(args);
@@ -47,14 +53,19 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
+        if (getArguments() != null) {
             step = getArguments().getParcelable(ARG_STEP);
+            location = (Location) getArguments().getSerializable(ARG_LOCATION);
+        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getBinding().setStep(step);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+
+        setupLayout();
+
+        return rootView;
     }
 
     @Override
@@ -85,6 +96,35 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23) releasePlayer();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FragmentInteractionListener) {
+            activityListener = (FragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement FragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        activityListener = null;
+    }
+
+    private void setupLayout() {
+        getBinding().setStep(step);
+
+        if (location == Location.FIRST)
+            getBinding().previousStep.setVisibility(View.GONE);
+        else if (location == Location.LAST)
+            getBinding().nextStep.setVisibility(View.GONE);
+
+        getBinding().previousStep.setOnClickListener(view -> activityListener.onPreviousStep());
+        getBinding().nextStep.setOnClickListener(view -> activityListener.onNextStep());
     }
 
     private void initializePlayer() {
@@ -118,5 +158,18 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
             player.release();
             player = null;
         }
+    }
+
+    public interface FragmentInteractionListener {
+
+        void onPreviousStep();
+
+        void onNextStep();
+    }
+
+    public enum Location {
+        FIRST,
+        MIDDLE,
+        LAST
     }
 }

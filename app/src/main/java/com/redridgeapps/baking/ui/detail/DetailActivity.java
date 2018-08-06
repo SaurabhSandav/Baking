@@ -14,7 +14,8 @@ import com.redridgeapps.baking.ui.detail.recipe_step.RecipeStepFragment;
 import com.redridgeapps.baking.ui.detail.step_detail.StepDetailFragment;
 
 public class DetailActivity extends BaseActivity<ActivityDetailBinding>
-        implements RecipeStepFragment.FragmentInteractionListener {
+        implements RecipeStepFragment.FragmentInteractionListener,
+        StepDetailFragment.FragmentInteractionListener {
 
     private static final String EXTRA_RECIPE = "extra_recipe";
     private static final String TAG_STEPS_FRAGMENT = "steps_fragment";
@@ -52,9 +53,27 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
     public void onStepSelected(Step step) {
         selectedStepIndex = recipe.getSteps().indexOf(step);
 
-        Fragment newFragment = StepDetailFragment.newInstance(step);
+        Fragment newFragment = StepDetailFragment.newInstance(step, getLocation());
 
         replaceFragmentMultiPane(newFragment);
+    }
+
+    @Override
+    public void onPreviousStep() {
+        if (--selectedStepIndex < 0)
+            throw new UnsupportedOperationException("No previous step!");
+
+        Fragment fragment = StepDetailFragment.newInstance(recipe.getSteps().get(selectedStepIndex), getLocation());
+        replaceFragmentMultiPane(fragment);
+    }
+
+    @Override
+    public void onNextStep() {
+        if (++selectedStepIndex >= recipe.getSteps().size())
+            throw new UnsupportedOperationException("No next step!");
+
+        Fragment fragment = StepDetailFragment.newInstance(recipe.getSteps().get(selectedStepIndex), getLocation());
+        replaceFragmentMultiPane(fragment);
     }
 
     private void showStepsFragment() {
@@ -74,5 +93,14 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
                 .replace(containerId, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private StepDetailFragment.Location getLocation() {
+        if (selectedStepIndex == 0)
+            return StepDetailFragment.Location.FIRST;
+        else if (selectedStepIndex == recipe.getSteps().size() - 1)
+            return StepDetailFragment.Location.LAST;
+        else
+            return StepDetailFragment.Location.MIDDLE;
     }
 }
