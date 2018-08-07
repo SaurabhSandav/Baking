@@ -5,6 +5,7 @@ import android.app.Application;
 import com.redridgeapps.baking.App;
 import com.redridgeapps.baking.di.module.ActivityBuilder;
 import com.redridgeapps.baking.di.module.AppModule;
+import com.redridgeapps.baking.di.module.BroadcastReceiverBuilder;
 import com.redridgeapps.baking.di.module.FragmentBuilder;
 
 import javax.inject.Singleton;
@@ -20,6 +21,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
                 AndroidSupportInjectionModule.class,
                 ActivityBuilder.class,
                 FragmentBuilder.class,
+                BroadcastReceiverBuilder.class,
                 AppModule.class
         }
 )
