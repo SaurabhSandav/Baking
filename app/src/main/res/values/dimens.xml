@@ -8,4 +8,6 @@
     <dimen name="common_margin">8dp</dimen>
     <dimen name="large_margin">16dp</dimen>
 
+    <dimen name="widget_margin">8dp</dimen>
+
 </resources>

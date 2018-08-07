@@ -26,6 +26,16 @@
 
         <activity android:name=".ui.detail.DetailActivity" />
 
+        <receiver android:name=".ui.widgets.ingredient.RecipeIngredientsWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/recipe_ingredients_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

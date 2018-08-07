@@ -1,5 +1,7 @@
 package com.redridgeapps.baking.ui.main;
 
+import android.appwidget.AppWidgetManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,9 +9,11 @@ import android.support.v7.widget.GridLayoutManager;
 import com.redridgeapps.baking.R;
 import com.redridgeapps.baking.databinding.ActivityMainBinding;
 import com.redridgeapps.baking.model.Recipe;
+import com.redridgeapps.baking.repo.PreferenceRepository;
 import com.redridgeapps.baking.repo.RecipeRepository;
 import com.redridgeapps.baking.ui.base.BaseActivity;
 import com.redridgeapps.baking.ui.detail.DetailActivity;
+import com.redridgeapps.baking.ui.widgets.ingredient.RecipeIngredientsWidget;
 import com.redridgeapps.baking.util.function.Consumer;
 
 import java.util.ArrayList;
@@ -24,8 +28,13 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
     @Inject
     RecipeRepository recipeRepo;
 
+    @Inject
+    PreferenceRepository prefRepo;
+
     private List<Recipe> recipeList = new ArrayList<>();
     private RecipeAdapter recipeAdapter;
+    private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+    private boolean widgetSelectionActivity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +47,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
             recipeRepo.fetchRecipes();
         }
 
+        checkIfWidgetSelectionMode(getIntent().getExtras());
         setupRecyclerView();
     }
 
@@ -73,7 +83,12 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
         WidthAndColumns widthAndColumns = calculateWidthAndColumns();
 
-        Consumer<Recipe> clickListener = recipe -> startActivity(DetailActivity.createIntent(this, recipe));
+        Consumer<Recipe> clickListener;
+
+        if (widgetSelectionActivity)
+            clickListener = this::updateWidget;
+        else
+            clickListener = recipe -> startActivity(DetailActivity.createIntent(this, recipe));
 
         recipeAdapter = new RecipeAdapter(widthAndColumns.getItemWidth(), clickListener);
 
@@ -82,6 +97,25 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         getBinding().recyclerView.setHasFixedSize(true);
 
         recipeAdapter.submitList(recipeList);
+    }
+
+    private void checkIfWidgetSelectionMode(Bundle extras) {
+        if (extras == null) return;
+
+        appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        widgetSelectionActivity = appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID;
+    }
+
+    private void updateWidget(Recipe recipe) {
+
+        prefRepo.saveIngredientsWidgetRecipe(appWidgetId, recipe);
+
+        RecipeIngredientsWidget
+                .updateAppWidget(getPackageName(), AppWidgetManager.getInstance(this), appWidgetId, recipe);
+
+        Intent resultIntent = new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        setResult(RESULT_OK, resultIntent);
+        finish();
     }
 
     private WidthAndColumns calculateWidthAndColumns() {
