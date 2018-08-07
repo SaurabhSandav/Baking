@@ -3,10 +3,8 @@ package com.redridgeapps.baking.di;
 import android.app.Application;
 
 import com.redridgeapps.baking.App;
-import com.redridgeapps.baking.di.module.ActivityBuilder;
 import com.redridgeapps.baking.di.module.AppModule;
-import com.redridgeapps.baking.di.module.BroadcastReceiverBuilder;
-import com.redridgeapps.baking.di.module.FragmentBuilder;
+import com.redridgeapps.baking.di.module.ComponentBuilder;
 
 import javax.inject.Singleton;
 
@@ -19,9 +17,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Component(
         modules = {
                 AndroidSupportInjectionModule.class,
-                ActivityBuilder.class,
-                FragmentBuilder.class,
-                BroadcastReceiverBuilder.class,
+                ComponentBuilder.class,
                 AppModule.class
         }
 )
