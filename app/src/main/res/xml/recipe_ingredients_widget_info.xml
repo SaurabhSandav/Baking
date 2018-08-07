@@ -3,7 +3,7 @@
     android:configure="com.redridgeapps.baking.ui.main.MainActivity"
     android:initialKeyguardLayout="@layout/recipe_ingredients_widget"
     android:initialLayout="@layout/recipe_ingredients_widget"
-    android:minWidth="110dp"
+    android:minWidth="180dp"
     android:minHeight="110dp"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />

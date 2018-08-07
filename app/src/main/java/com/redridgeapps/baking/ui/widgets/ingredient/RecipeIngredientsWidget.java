@@ -20,13 +20,16 @@ public class RecipeIngredientsWidget extends AppWidgetProvider {
     PreferenceRepository prefRepo;
 
     public static void updateAppWidget(
-            String packageName,
+            Context context,
             AppWidgetManager appWidgetManager,
             int appWidgetId,
             Recipe recipe
     ) {
-        RemoteViews views = new RemoteViews(packageName, R.layout.recipe_ingredients_widget);
-        views.setTextViewText(R.id.appwidget_text, recipe.getName());
+        Intent intent = IngredientsListWidgetService.createIntent(context, appWidgetId);
+
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_ingredients_widget);
+        views.setTextViewText(R.id.recipe_name, recipe.getName());
+        views.setRemoteAdapter(R.id.ingredient_list, intent);
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -45,12 +48,7 @@ public class RecipeIngredientsWidget extends AppWidgetProvider {
 
             if (recipe == null) continue;
 
-            updateAppWidget(
-                    context.getPackageName(),
-                    appWidgetManager,
-                    appWidgetId,
-                    recipe
-            );
+            updateAppWidget(context, appWidgetManager, appWidgetId, recipe);
         }
     }
 

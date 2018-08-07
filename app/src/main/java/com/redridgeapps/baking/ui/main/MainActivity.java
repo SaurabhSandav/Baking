@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         prefRepo.saveIngredientsWidgetRecipe(appWidgetId, recipe);
 
         RecipeIngredientsWidget
-                .updateAppWidget(getPackageName(), AppWidgetManager.getInstance(this), appWidgetId, recipe);
+                .updateAppWidget(this, AppWidgetManager.getInstance(this), appWidgetId, recipe);
 
         Intent resultIntent = new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         setResult(RESULT_OK, resultIntent);
