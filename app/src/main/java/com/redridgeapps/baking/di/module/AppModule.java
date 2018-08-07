@@ -1,6 +1,11 @@
 package com.redridgeapps.baking.di.module;
 
+import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.redridgeapps.baking.api.RecipeService;
+import com.squareup.moshi.Moshi;
 
 import javax.inject.Singleton;
 
@@ -14,6 +19,12 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
+    static SharedPreferences provideSharedPreferences(Application application) {
+        return PreferenceManager.getDefaultSharedPreferences(application);
+    }
+
+    @Provides
+    @Singleton
     static Retrofit provideRetrofit(MoshiConverterFactory moshiCon) {
         return new Retrofit.Builder()
                 .baseUrl("http://localhost/")
@@ -23,8 +34,14 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static MoshiConverterFactory provideMoshiConverterFactory() {
-        return MoshiConverterFactory.create();
+    static Moshi provideMoshi() {
+        return new Moshi.Builder().build();
+    }
+
+    @Provides
+    @Singleton
+    static MoshiConverterFactory provideMoshiConverterFactory(Moshi moshi) {
+        return MoshiConverterFactory.create(moshi);
     }
 
     @Provides
