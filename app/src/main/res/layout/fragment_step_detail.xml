@@ -28,6 +28,31 @@
             app:layout_constraintTop_toTopOf="parent"
             app:show_timeout="1000" />
 
+        <TextView
+            android:id="@+id/short_description"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large_margin"
+            android:text="@{step.shortDescription}"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/exoplayer"
+            tools:text="Short Description" />
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large_margin"
+            android:text="@{step.description}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/short_description"
+            tools:text="@tools:sample/lorem" />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
