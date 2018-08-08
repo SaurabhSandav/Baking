@@ -30,6 +30,7 @@ ext {
     junit_version = '4.12'
     test_version = '1.0.2'
     espresso_version = '3.0.2'
+    okhttp_idling_version = '1.0.0'
     support_version = '27.1.1'
     constraint_layout_version = '1.1.2'
     lifecycle_version = '1.1.1'

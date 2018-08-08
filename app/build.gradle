@@ -31,7 +31,11 @@ dependencies {
     // Testing
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "com.android.support.test:runner:$test_version"
+    androidTestImplementation "com.android.support.test:rules:$test_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:$espresso_version"
+    androidTestImplementation "com.jakewharton.espresso:okhttp3-idling-resource:$okhttp_idling_version"
 
     // Support libraries
     implementation "com.android.support:appcompat-v7:$support_version"
