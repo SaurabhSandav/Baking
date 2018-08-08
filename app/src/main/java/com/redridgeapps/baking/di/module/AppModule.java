@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.moshi.MoshiConverterFactory;
 
@@ -25,9 +26,18 @@ public abstract class AppModule {
 
     @Provides
     @Singleton
-    static Retrofit provideRetrofit(MoshiConverterFactory moshiCon) {
+    static OkHttpClient provideOkHttpClient() {
+        return new OkHttpClient()
+                .newBuilder()
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    static Retrofit provideRetrofit(MoshiConverterFactory moshiCon, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl("http://localhost/")
+                .client(okHttpClient)
                 .addConverterFactory(moshiCon)
                 .build();
     }

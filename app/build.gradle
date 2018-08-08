@@ -52,6 +52,9 @@ dependencies {
     // Moshi
     implementation "com.squareup.moshi:moshi:$moshi_version"
 
+    // OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+
     // Retrofit + ( Converters and Adapters )
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"

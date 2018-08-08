@@ -35,6 +35,7 @@ ext {
     lifecycle_version = '1.1.1'
     dagger_version = '2.16'
     moshi_version = '1.6.0'
+    okhttp_version = '3.11.0'
     retrofit_version = '2.4.0'
     leak_canary_version = '1.6.1'
     timeline_view_version = '1.0.6'
