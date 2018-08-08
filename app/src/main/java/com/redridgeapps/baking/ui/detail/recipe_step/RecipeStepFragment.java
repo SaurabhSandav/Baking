@@ -3,6 +3,7 @@ package com.redridgeapps.baking.ui.detail.recipe_step;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import com.redridgeapps.baking.databinding.FragmentRecipeStepBinding;
 import com.redridgeapps.baking.model.Recipe;
 import com.redridgeapps.baking.model.Step;
 import com.redridgeapps.baking.ui.base.BaseFragment;
+
+import java.util.ArrayList;
 
 public class RecipeStepFragment extends BaseFragment<FragmentRecipeStepBinding> {
 
@@ -74,13 +77,22 @@ public class RecipeStepFragment extends BaseFragment<FragmentRecipeStepBinding> 
 
     private void setupRecyclerView() {
 
-        RecipeStepAdapter stepAdapter = new RecipeStepAdapter(activityListener::onStepSelected);
+        ArrayList<Object> objectList = new ArrayList<>();
+        objectList.add("Ingredients");
+        objectList.addAll(recipe.getIngredients());
+        objectList.add("Steps");
+
+        int stepStartIndex = objectList.size();
+        objectList.addAll(recipe.getSteps());
+        int stepEndIndex = objectList.size() - 1;
+
+        Pair<Integer, Integer> stepIndexes = new Pair<>(stepStartIndex, stepEndIndex);
+
+        RecipeStepAdapter stepAdapter = new RecipeStepAdapter(objectList, stepIndexes, activityListener::onStepSelected);
 
         getBinding().recyclerView.setAdapter(stepAdapter);
         getBinding().recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         getBinding().recyclerView.setHasFixedSize(true);
-
-        stepAdapter.submitList(recipe.getSteps());
     }
 
     public interface FragmentInteractionListener {
