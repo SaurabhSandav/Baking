@@ -12,74 +12,82 @@
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/exoplayer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="H, 16:9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:controller_layout_id="@layout/custom_playback_controls"
-            app:layout_constraintTop_toTopOf="parent"
-            app:show_timeout="1000" />
-
-        <TextView
-            android:id="@+id/short_description"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="0dp"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/large_margin"
-            android:text="@{step.shortDescription}"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/exoplayer"
-            tools:text="Short Description" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/description"
-            style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/large_margin"
-            android:text="@{step.description}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/short_description"
-            tools:text="@tools:sample/lorem" />
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/exoplayer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="H, 16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:controller_layout_id="@layout/custom_playback_controls"
+                app:layout_constraintTop_toTopOf="parent"
+                app:show_timeout="1000" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/previousStep"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/short_description"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/text_previous"
-                android:textColor="@color/colorAccent" />
+                android:layout_margin="@dimen/large_margin"
+                android:text="@{step.shortDescription}"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/exoplayer"
+                tools:text="Short Description" />
 
-            <Button
-                android:id="@+id/nextStep"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/description"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/text_next"
-                android:textColor="@color/colorAccent" />
-        </LinearLayout>
+                android:layout_margin="@dimen/large_margin"
+                android:text="@{step.description}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/short_description"
+                app:layout_constraintBottom_toTopOf="@+id/button_bar"
+                tools:text="@tools:sample/lorem" />
 
-    </android.support.constraint.ConstraintLayout>
+            <LinearLayout
+                android:id="@+id/button_bar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <Button
+                    android:id="@+id/previousStep"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/text_previous"
+                    android:textColor="@color/colorAccent" />
+
+                <Button
+                    android:id="@+id/nextStep"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/text_next"
+                    android:textColor="@color/colorAccent" />
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>
