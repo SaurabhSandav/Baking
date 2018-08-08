@@ -21,6 +21,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import okhttp3.OkHttpClient;
+
 public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     public static final String KEY_RECIPE_LIST = "recipe_list";
@@ -30,6 +32,9 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
 
     @Inject
     PreferenceRepository prefRepo;
+
+    @Inject
+    OkHttpClient okHttpClient;
 
     private List<Recipe> recipeList = new ArrayList<>();
     private RecipeAdapter recipeAdapter;
@@ -61,6 +66,10 @@ public class MainActivity extends BaseActivity<ActivityMainBinding> {
         super.onSaveInstanceState(outState);
         if (recipeList != null)
             outState.putParcelableArrayList(KEY_RECIPE_LIST, new ArrayList<>(recipeList));
+    }
+
+    public OkHttpClient getOkHttpClient() {
+        return okHttpClient;
     }
 
     private void observeRecipeOperations() {
