@@ -22,7 +22,8 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/large_margin"
             android:layout_marginStart="@dimen/large_margin"
-            app:line="@color/colorPrimary"
+            app:line="@color/colorAccent"
+            app:marker="@drawable/custom_marker"
             app:lineSize="3dp"
             app:markerSize="20dp" />
 
