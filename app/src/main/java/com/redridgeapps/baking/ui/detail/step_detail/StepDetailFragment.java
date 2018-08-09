@@ -27,6 +27,8 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
 
     private static final String ARG_STEP = "step";
     private static final String ARG_LOCATION = "location";
+    private static final String KEY_PLAYER_POSITION = "key_player_position";
+    private static final String KEY_PLAY_WHEN_READY = "key_play_when_ready";
 
     private Step step;
     private Location location;
@@ -57,6 +59,11 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
             step = getArguments().getParcelable(ARG_STEP);
             location = (Location) getArguments().getSerializable(ARG_LOCATION);
         }
+
+        if (savedInstanceState != null) {
+            playbackPosition = savedInstanceState.getLong(KEY_PLAYER_POSITION);
+            playWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
+        }
     }
 
     @Override
@@ -74,6 +81,14 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putLong(KEY_PLAYER_POSITION, player.getCurrentPosition());
+        outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) initializePlayer();
@@ -82,7 +97,6 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     @Override
     public void onResume() {
         super.onResume();
-        //hideSystemUi();
         if (Util.SDK_INT <= 23 || player == null) initializePlayer();
     }
 
@@ -136,12 +150,12 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
 
         getBinding().exoplayer.setPlayer(player);
 
-        player.setPlayWhenReady(playWhenReady);
-        player.seekTo(currentWindow, playbackPosition);
-
         Uri uri = Uri.parse(step.getVideoURL());
         MediaSource mediaSource = buildMediaSource(uri);
         player.prepare(mediaSource, true, false);
+
+        player.setPlayWhenReady(playWhenReady);
+        player.seekTo(currentWindow, playbackPosition);
     }
 
     private MediaSource buildMediaSource(Uri uri) {
@@ -160,16 +174,16 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
         }
     }
 
+    public enum Location {
+        FIRST,
+        MIDDLE,
+        LAST
+    }
+
     public interface FragmentInteractionListener {
 
         void onPreviousStep();
 
         void onNextStep();
-    }
-
-    public enum Location {
-        FIRST,
-        MIDDLE,
-        LAST
     }
 }
