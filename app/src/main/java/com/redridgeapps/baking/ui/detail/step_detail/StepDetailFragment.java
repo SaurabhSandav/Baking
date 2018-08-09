@@ -84,8 +84,10 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putLong(KEY_PLAYER_POSITION, player.getCurrentPosition());
-        outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
+        if (player != null) {
+            outState.putLong(KEY_PLAYER_POSITION, player.getCurrentPosition());
+            outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
+        }
     }
 
     @Override
@@ -142,6 +144,12 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     }
 
     private void initializePlayer() {
+        if (step.getVideoURL().isEmpty()) {
+            getBinding().exoplayer.setVisibility(View.GONE);
+            getBinding().noVideoError.setVisibility(View.VISIBLE);
+            return;
+        }
+
         player = ExoPlayerFactory.newSimpleInstance(
                 new DefaultRenderersFactory(requireContext()),
                 new DefaultTrackSelector(),
