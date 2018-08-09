@@ -144,9 +144,10 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     }
 
     private void initializePlayer() {
-        if (step.getVideoURL().isEmpty()) {
-            getBinding().exoplayer.setVisibility(View.GONE);
-            getBinding().noVideoError.setVisibility(View.VISIBLE);
+        String url = getURL();
+
+        if (url == null) {
+            getBinding().videoView.setVisibility(View.GONE);
             return;
         }
 
@@ -158,7 +159,7 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
 
         getBinding().exoplayer.setPlayer(player);
 
-        Uri uri = Uri.parse(step.getVideoURL());
+        Uri uri = Uri.parse(url);
         MediaSource mediaSource = buildMediaSource(uri);
         player.prepare(mediaSource, true, false);
 
@@ -188,6 +189,29 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
                 getArguments().putBundle(ARG_PLAYER_STATE, args);
             }
         }
+    }
+
+    private String getURL() {
+        String url = step.getVideoURL();
+
+        if (url.isEmpty()) {
+
+            String thumbnailURL = step.getThumbnailURL();
+
+            if (!"mp4".equals(thumbnailURL.substring(thumbnailURL.length() - 3))) {
+                setThumbnail();
+                return null;
+            }
+
+            url = thumbnailURL;
+        }
+
+        return url;
+    }
+
+    private void setThumbnail() {
+        if (step.getThumbnailURL() != null)
+            getBinding().thumbnail.setVisibility(View.VISIBLE);
     }
 
     public enum Location {

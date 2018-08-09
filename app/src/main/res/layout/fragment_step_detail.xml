@@ -45,10 +45,12 @@
                         app:show_timeout="1000" />
 
                     <ImageView
-                        android:id="@+id/no_video_error"
+                        android:id="@+id/thumbnail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/recipe_error"
+                        app:error="@{@drawable/recipe_error}"
+                        app:imageUrl="@{step.thumbnailURL}"
+                        app:placeholder="@{@drawable/recipe_placeholder}"
                         android:visibility="gone" />
 
                 </FrameLayout>
