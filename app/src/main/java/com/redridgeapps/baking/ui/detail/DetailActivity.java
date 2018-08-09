@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.redridgeapps.baking.R;
 import com.redridgeapps.baking.databinding.ActivityDetailBinding;
@@ -19,6 +20,7 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
 
     private static final String EXTRA_RECIPE = "extra_recipe";
     private static final String TAG_STEPS_FRAGMENT = "steps_fragment";
+    private static final String TAG_DETAIL_FRAGMENT = "detail_fragment";
 
     private Recipe recipe;
     private boolean isLayoutMultiPane;
@@ -39,6 +41,8 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
         isLayoutMultiPane = getBinding().fragmentDetail != null;
 
         setTitle(recipe.getName());
+
+        getSupportFragmentManager().addOnBackStackChangedListener(this::observeFragmentTransaction);
 
         if (getSupportFragmentManager().findFragmentByTag(TAG_STEPS_FRAGMENT) == null)
             showStepsFragment();
@@ -90,7 +94,7 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
         getSupportFragmentManager().popBackStack();
 
         getSupportFragmentManager().beginTransaction()
-                .replace(containerId, fragment)
+                .replace(containerId, fragment, TAG_DETAIL_FRAGMENT)
                 .addToBackStack(null)
                 .commit();
     }
@@ -102,5 +106,16 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
             return StepDetailFragment.Location.LAST;
         else
             return StepDetailFragment.Location.MIDDLE;
+    }
+
+    private void observeFragmentTransaction() {
+        if (isLayoutMultiPane) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_DETAIL_FRAGMENT);
+
+            if (fragment == null)
+                getBinding().selectStep.setVisibility(View.VISIBLE);
+            else
+                getBinding().selectStep.setVisibility(View.GONE);
+        }
     }
 }

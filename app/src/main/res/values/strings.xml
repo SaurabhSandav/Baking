@@ -4,6 +4,7 @@
     <string name="text_retry">Retry</string>
     <string name="text_previous">Previous</string>
     <string name="text_next">Next</string>
+    <string name="text_select_a_step">Select a Step</string>
 
     <string name="error_fetch_failed">Fetching recipes failed!</string>
 </resources>
