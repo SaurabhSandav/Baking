@@ -21,6 +21,7 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
     private static final String EXTRA_RECIPE = "extra_recipe";
     private static final String TAG_STEPS_FRAGMENT = "steps_fragment";
     private static final String TAG_DETAIL_FRAGMENT = "detail_fragment";
+    private static final String KEY_SELECTED_STEP = "key_selected_step";
 
     private Recipe recipe;
     private boolean isLayoutMultiPane;
@@ -38,12 +39,21 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
 
         recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
 
+        if (savedInstanceState != null)
+            selectedStepIndex = savedInstanceState.getInt(KEY_SELECTED_STEP);
+
         setupLayout();
     }
 
     @Override
     protected int provideLayout() {
         return R.layout.activity_detail;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_SELECTED_STEP, selectedStepIndex);
     }
 
     @Override
