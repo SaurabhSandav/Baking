@@ -38,14 +38,7 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
 
         recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
 
-        isLayoutMultiPane = getBinding().fragmentDetail != null;
-
-        setTitle(recipe.getName());
-
-        getSupportFragmentManager().addOnBackStackChangedListener(this::observeFragmentTransaction);
-
-        if (getSupportFragmentManager().findFragmentByTag(TAG_STEPS_FRAGMENT) == null)
-            showStepsFragment();
+        setupLayout();
     }
 
     @Override
@@ -78,6 +71,24 @@ public class DetailActivity extends BaseActivity<ActivityDetailBinding>
 
         Fragment fragment = StepDetailFragment.newInstance(recipe.getSteps().get(selectedStepIndex), getLocation());
         replaceFragmentMultiPane(fragment);
+    }
+
+    private void setupLayout() {
+        isLayoutMultiPane = getBinding().fragmentDetail != null;
+
+        setTitle(recipe.getName());
+
+        getSupportFragmentManager().addOnBackStackChangedListener(this::observeFragmentTransaction);
+
+        if (getSupportFragmentManager().findFragmentByTag(TAG_STEPS_FRAGMENT) == null)
+            showStepsFragment();
+        else {
+            Fragment oldFragment = getSupportFragmentManager().findFragmentByTag(TAG_DETAIL_FRAGMENT);
+            if (oldFragment != null) {
+                getSupportFragmentManager().popBackStack();
+                replaceFragmentMultiPane(StepDetailFragment.newInstance(oldFragment.getArguments()));
+            }
+        }
     }
 
     private void showStepsFragment() {

@@ -27,6 +27,7 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
 
     private static final String ARG_STEP = "step";
     private static final String ARG_LOCATION = "location";
+    private static final String ARG_PLAYER_STATE = "player_state";
     private static final String KEY_PLAYER_POSITION = "key_player_position";
     private static final String KEY_PLAY_WHEN_READY = "key_play_when_ready";
 
@@ -45,7 +46,15 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
         Bundle args = new Bundle();
         args.putParcelable(ARG_STEP, step);
         args.putSerializable(ARG_LOCATION, location);
+        args.putBundle(ARG_PLAYER_STATE, null);
 
+        StepDetailFragment fragment = new StepDetailFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static StepDetailFragment newInstance(Bundle args) {
         StepDetailFragment fragment = new StepDetailFragment();
         fragment.setArguments(args);
 
@@ -58,11 +67,12 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
         if (getArguments() != null) {
             step = getArguments().getParcelable(ARG_STEP);
             location = (Location) getArguments().getSerializable(ARG_LOCATION);
-        }
 
-        if (savedInstanceState != null) {
-            playbackPosition = savedInstanceState.getLong(KEY_PLAYER_POSITION);
-            playWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
+            Bundle playerState = getArguments().getBundle(ARG_PLAYER_STATE);
+            if (playerState != null) {
+                playbackPosition = playerState.getLong(KEY_PLAYER_POSITION);
+                playWhenReady = playerState.getBoolean(KEY_PLAY_WHEN_READY);
+            }
         }
     }
 
@@ -78,16 +88,6 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
     @Override
     protected int provideLayout() {
         return R.layout.fragment_step_detail;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        if (player != null) {
-            outState.putLong(KEY_PLAYER_POSITION, player.getCurrentPosition());
-            outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
-        }
     }
 
     @Override
@@ -179,6 +179,14 @@ public class StepDetailFragment extends BaseFragment<FragmentStepDetailBinding> 
             playWhenReady = player.getPlayWhenReady();
             player.release();
             player = null;
+
+            if (getArguments() != null) {
+                Bundle args = new Bundle();
+                args.putLong(KEY_PLAYER_POSITION, playbackPosition);
+                args.putBoolean(KEY_PLAY_WHEN_READY, playWhenReady);
+
+                getArguments().putBundle(ARG_PLAYER_STATE, args);
+            }
         }
     }
 
