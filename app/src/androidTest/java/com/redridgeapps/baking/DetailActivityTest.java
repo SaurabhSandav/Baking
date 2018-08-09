@@ -30,6 +30,11 @@ import static org.hamcrest.Matchers.not;
 @LargeTest
 public class DetailActivityTest {
 
+    private static final String NUTELLA_PIE = "Nutella Pie";
+    private static final String RECIPE_INTRODUCTION = "Recipe Introduction";
+    private static final String START_FILLING_PREP = "Start filling prep";
+    private static final String FINISHING_STEPS = "Finishing Steps";
+
     @Rule
     public IntentsTestRule<MainActivity> intentsTestRule = new IntentsTestRule<>(MainActivity.class);
 
@@ -44,7 +49,7 @@ public class DetailActivityTest {
     @Test
     public void checkRecipeIntroductionDisplayed() {
         onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition(0, click()));
+                .perform(actionOnItem(hasDescendant(withText(NUTELLA_PIE)), click()));
 
         onView(withText("Recipe Introduction"))
                 .check(matches(isDisplayed()));
@@ -53,9 +58,9 @@ public class DetailActivityTest {
     @Test
     public void checkFinishingStepsDisplayed() {
         onView(withId(R.id.recycler_view))
-                .perform(actionOnItemAtPosition(0, click()));
+                .perform(actionOnItem(hasDescendant(withText(NUTELLA_PIE)), click()));
 
-        onView(withText("Start filling prep"))
+        onView(withText(START_FILLING_PREP))
                 .check(matches(isDisplayed()));
     }
 
@@ -65,7 +70,7 @@ public class DetailActivityTest {
                 .perform(actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.recyclerView))
-                .perform(actionOnItem(hasDescendant(withText("Recipe Introduction")), click()));
+                .perform(actionOnItem(hasDescendant(withText(RECIPE_INTRODUCTION)), click()));
 
         onView(withId(R.id.exoplayer)).check(matches(isDisplayed()));
     }
@@ -76,7 +81,7 @@ public class DetailActivityTest {
                 .perform(actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.recyclerView))
-                .perform(actionOnItem(hasDescendant(withText("Recipe Introduction")), click()));
+                .perform(actionOnItem(hasDescendant(withText(RECIPE_INTRODUCTION)), click()));
 
         onView(withId(R.id.previousStep)).check(matches(not(isDisplayed())));
     }
@@ -87,7 +92,7 @@ public class DetailActivityTest {
                 .perform(actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.recyclerView))
-                .perform(actionOnItem(hasDescendant(withText("Finishing Steps")), click()));
+                .perform(actionOnItem(hasDescendant(withText(FINISHING_STEPS)), click()));
 
         onView(withId(R.id.nextStep)).check(matches(not(isDisplayed())));
     }
@@ -98,7 +103,7 @@ public class DetailActivityTest {
                 .perform(actionOnItemAtPosition(0, click()));
 
         onView(withId(R.id.recyclerView))
-                .perform(actionOnItem(hasDescendant(withText("Start filling prep")), click()));
+                .perform(actionOnItem(hasDescendant(withText(START_FILLING_PREP)), click()));
 
         onView(withId(R.id.previousStep)).check(matches(isDisplayed()));
         onView(withId(R.id.nextStep)).check(matches(isDisplayed()));
